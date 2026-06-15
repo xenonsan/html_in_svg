@@ -1,101 +1,214 @@
-<svg xmlns="http://w3.org" viewBox="0 0 800 600" width="100%" height="100%">
-  <!-- SVGとしての背景グラフィック（画像であることを証明する格子模様） -->
-  <defs>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0e0e0" stroke-width="1"/>
-    </pattern>
-  </defs>
-  <rect width="100%" height="100%" fill="url(#grid)" />
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" width="100%" height="100%" viewBox="0 0 1200 800">
+  <style>
+    /* SVG自体のフォールバックや背景用スタイル（必要に応じて記述） */
+    svg { background: #1a1a2e; }
+  </style>
 
-  <!-- HTML/CSS/JSを埋め込むためのコンテナ -->
-  <foreignObject x="50" y="50" width="700" height="500">
-    <xhtml:div xmlns:xhtml="http://w3.org" style="
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background: rgba(255, 255, 255, 0.95);
-      border: 2px solid #333;
-      border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-      height: 80%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-sizing: border-box;
-    ">
-      <!-- ヘッダー -->
-      <xhtml:header style="text-align: center; margin-bottom: 20px;">
-        <xhtml:h1 style="color: #0076ff; margin: 0 0 10px 0; font-size: 24px;">
-          📦 SVG Embedded Website
-        </xhtml:h1>
-        <xhtml:p style="color: #666; margin: 0; font-size: 14px;">
-          この画面全体が「1枚のSVG画像」の中にレンダリングされています。
-        </xhtml:p>
-      </xhtml:header>
+  <foreignObject width="100%" height="100%" requiredExtensions="http://www.w3.org/1999/xhtml">
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>GUST Browser in SVG</title>
+      
+      <!-- 外部アセット・フォントのリモート読み込み -->
+      <link rel="preconnect" href="https://googleapis.com" />
+      <link rel="preconnect" href="https://gstatic.com" crossorigin="anonymous" />
+      <link href="https://googleapis.com/css2?family=JetBrains+Mono:wght@400;600&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+      <link rel="stylesheet" href="https://cloudflare.com" />
 
-      <!-- メインコンテンツ -->
-      <xhtml:main style="
-        background: #f4f7f6;
-        border-left: 5px solid #0076ff;
-        padding: 15px;
-        border-radius: 4px;
-        font-size: 15px;
-        line-height: 1.6;
-        color: #333;
-      ">
-        <xhtml:p style="margin: 0 0 10px 0; font-weight: bold; color: #ff3b30;">
-          📢 これは「.svg」ファイルの中に埋め込まれた静的サイトです。
-        </xhtml:p>
-        <xhtml:ul style="margin: 0; padding-left: 20px; color: #444;">
-          <xhtml:li>ブラウザのアドレスバーの末尾を確認してください（.svg になっています）</xhtml:li>
-          <xhtml:li>画像フォーマットですが、文字の選択やコピーが可能です</xhtml:li>
-          <xhtml:li>XML内部の &lt;foreignObject&gt; 技術を利用しています</xhtml:li>
-        </xhtml:ul>
-      </xhtml:main>
+      <!-- インラインCSS（埋め込み整合性のため外部CSSの内容をここに集約） -->
+      <style>
+        body {
+          margin: 0;
+          padding: 40px;
+          box-sizing: border-box;
+          font-family: 'Space Grotesk', 'JetBrains Mono', sans-serif;
+          background: radial-gradient(circle at top right, #232526, #414345);
+          color: #ffffff;
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
 
-      <!-- インタラクティブ機能（JavaScriptボタン） -->
-      <xhtml:div style="text-align: center; margin: 20px 0;">
-        <xhtml:button id="verifyBtn" style="
-          background: #0076ff;
-          color: white;
+        .browser-container {
+          width: 100%;
+          max-width: 1000px;
+          background: #0f111a;
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 16px;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+          overflow: hidden;
+        }
+
+        /* 模擬ブラウザのヘッダーバー */
+        .browser-header {
+          background: #1e2233;
+          padding: 12px 20px;
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .window-buttons {
+          display: flex;
+          gap: 8px;
+        }
+
+        .dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+        }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .address-bar {
+          flex-grow: 1;
+          background: #0f111a;
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 8px;
+          padding: 6px 15px;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 13px;
+          color: #a6accd;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .address-bar i {
+          color: #27c93f;
+        }
+
+        /* メインコンテンツ */
+        .browser-content {
+          padding: 40px;
+          text-align: center;
+        }
+
+        h1 {
+          font-size: 32px;
+          margin-bottom: 15px;
+          background: linear-gradient(45deg, #00f2fe, #4facfe);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+          display: inline-block;
+          background: rgba(79, 172, 254, 0.1);
+          border: 1px solid #4facfe;
+          color: #00f2fe;
+          padding: 6px 16px;
+          border-radius: 30px;
+          font-size: 14px;
+          font-weight: 600;
+          margin-bottom: 30px;
+        }
+
+        .info-card {
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 12px;
+          padding: 25px;
+          max-width: 600px;
+          margin: 0 auto 30px auto;
+          text-align: left;
+          line-height: 1.6;
+        }
+
+        .info-card ul {
+          margin: 0;
+          padding-left: 20px;
+        }
+
+        .info-card li {
+          margin-bottom: 10px;
+          color: #c3cee3;
+        }
+
+        /* アクションエリア */
+        .btn-verify {
+          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+          color: #0f111a;
           border: none;
-          padding: 12px 24px;
-          font-size: 14px;
+          padding: 14px 28px;
+          font-size: 15px;
           font-weight: bold;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
-          transition: background 0.2s;
-        ">
-          本当にSVGか確認する（JSの実行）
-        </xhtml:button>
-        <xhtml:p id="resultMsg" style="
-          margin-top: 15px;
+          transition: all 0.3s ease;
+          font-family: 'Space Grotesk', sans-serif;
+          box-shadow: 0 4px 15px rgba(0,242,254,0.3);
+        }
+
+        .btn-verify:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(0,242,254,0.5);
+        }
+
+        #status-log {
+          margin-top: 25px;
+          font-family: 'JetBrains Mono', monospace;
           font-size: 14px;
-          font-weight: bold;
-          color: #28a745;
-          min-height: 20px;
-        "></xhtml:p>
-      </xhtml:div>
+          color: #82aaff;
+          min-height: 24px;
+        }
+      </style>
+    </head>
+    <body>
 
-      <!-- フッター -->
-      <xhtml:footer style="
-        border-top: 1px solid #eee;
-        padding-top: 15px;
-        text-align: center;
-        font-size: 12px;
-        color: #999;
-      ">
-        SVG Mini-Site Concept • 拡大縮小しても文字やレイアウトが崩れません
-      </xhtml:footer>
+      <div class="browser-container">
+        <!-- ブラウザ風ヘッダーバー -->
+        <div class="browser-header">
+          <div class="window-buttons">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+          </div>
+          <div class="address-bar">
+            <i class="fa-solid ref-icon fa-lock"></i>
+            <span>file:///workspace/site_inside_image.svg</span>
+          </div>
+        </div>
 
-      <!-- 動的スクリプトの埋め込み -->
-      <xhtml:script type="text/javascript">
-        document.getElementById('verifyBtn').addEventListener('click', function() {
-          const msg = document.getElementById('resultMsg');
-          msg.textContent = '🎉 成功: SVG内部のJavaScriptが正常に動作しました！現在ルート要素は &lt;svg&gt; です。';
-          this.style.background = '#28a745';
-          this.textContent = '検証完了';
+        <!-- Webサイト本体 -->
+        <div class="browser-content">
+          <div class="badge"><i class="fa-solid fa-code"></i> SVG &lt;foreignObject&gt; Static Site</div>
+          <h1>GUST Browser Concept</h1>
+          
+          <div class="info-card">
+            <p style="margin-top:0; color:#fff; font-weight:600;"><i class="fa-solid fa-circle-info" style="color:#00f2fe;"></i> この画面の正体について</p>
+            <ul>
+              <li>これはHTMLファイルではなく、拡張子が <strong>.svg</strong> の純粋な「ベクトル画像ファイル」です。</li>
+              <li>W3CのXML名前空間（xmlns）機能を利用し、画像の中に完全なHTML5/CSS3環境を再現しています。</li>
+              <li>Google FontsやFont Awesome（上のアイコン類）も画像内部から直接読み込んでレンダリングしています。</li>
+            </ul>
+          </div>
+
+          <button id="actionBtn" class="btn-verify">
+            <i class="fa-solid fa-terminal"></i> 内部スクリプトを動かす
+          </button>
+
+          <div id="status-log"></div>
+        </div>
+      </div>
+
+      <!-- 埋め込みJavaScript -->
+      <script>
+        document.getElementById('actionBtn').addEventListener('click', function() {
+          const log = document.getElementById('status-log');
+          const rootTag = document.documentElement.tagName;
+          
+          log.innerHTML = `<i class="fa-solid fa-check-circle" style="color:#27c93f;"></i> JS実行成功! ルート要素名: &lt;${rootTag}&gt; (このサイトがSVGである証拠です)`;
+          log.style.color = '#27c93f';
         });
-      </xhtml:script>
-    </xhtml:div>
+      </script>
+    </body>
+    </html>
   </foreignObject>
 </svg>
