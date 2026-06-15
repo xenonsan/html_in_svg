@@ -1,0 +1,101 @@
+<svg xmlns="http://w3.org" viewBox="0 0 800 600" width="100%" height="100%">
+  <!-- SVGとしての背景グラフィック（画像であることを証明する格子模様） -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grid)" />
+
+  <!-- HTML/CSS/JSを埋め込むためのコンテナ -->
+  <foreignObject x="50" y="50" width="700" height="500">
+    <xhtml:div xmlns:xhtml="http://w3.org" style="
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #333;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+    ">
+      <!-- ヘッダー -->
+      <xhtml:header style="text-align: center; margin-bottom: 20px;">
+        <xhtml:h1 style="color: #0076ff; margin: 0 0 10px 0; font-size: 24px;">
+          📦 SVG Embedded Website
+        </xhtml:h1>
+        <xhtml:p style="color: #666; margin: 0; font-size: 14px;">
+          この画面全体が「1枚のSVG画像」の中にレンダリングされています。
+        </xhtml:p>
+      </xhtml:header>
+
+      <!-- メインコンテンツ -->
+      <xhtml:main style="
+        background: #f4f7f6;
+        border-left: 5px solid #0076ff;
+        padding: 15px;
+        border-radius: 4px;
+        font-size: 15px;
+        line-height: 1.6;
+        color: #333;
+      ">
+        <xhtml:p style="margin: 0 0 10px 0; font-weight: bold; color: #ff3b30;">
+          📢 これは「.svg」ファイルの中に埋め込まれた静的サイトです。
+        </xhtml:p>
+        <xhtml:ul style="margin: 0; padding-left: 20px; color: #444;">
+          <xhtml:li>ブラウザのアドレスバーの末尾を確認してください（.svg になっています）</xhtml:li>
+          <xhtml:li>画像フォーマットですが、文字の選択やコピーが可能です</xhtml:li>
+          <xhtml:li>XML内部の &lt;foreignObject&gt; 技術を利用しています</xhtml:li>
+        </xhtml:ul>
+      </xhtml:main>
+
+      <!-- インタラクティブ機能（JavaScriptボタン） -->
+      <xhtml:div style="text-align: center; margin: 20px 0;">
+        <xhtml:button id="verifyBtn" style="
+          background: #0076ff;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          font-size: 14px;
+          font-weight: bold;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background 0.2s;
+        ">
+          本当にSVGか確認する（JSの実行）
+        </xhtml:button>
+        <xhtml:p id="resultMsg" style="
+          margin-top: 15px;
+          font-size: 14px;
+          font-weight: bold;
+          color: #28a745;
+          min-height: 20px;
+        "></xhtml:p>
+      </xhtml:div>
+
+      <!-- フッター -->
+      <xhtml:footer style="
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+        text-align: center;
+        font-size: 12px;
+        color: #999;
+      ">
+        SVG Mini-Site Concept • 拡大縮小しても文字やレイアウトが崩れません
+      </xhtml:footer>
+
+      <!-- 動的スクリプトの埋め込み -->
+      <xhtml:script type="text/javascript">
+        document.getElementById('verifyBtn').addEventListener('click', function() {
+          const msg = document.getElementById('resultMsg');
+          msg.textContent = '🎉 成功: SVG内部のJavaScriptが正常に動作しました！現在ルート要素は &lt;svg&gt; です。';
+          this.style.background = '#28a745';
+          this.textContent = '検証完了';
+        });
+      </xhtml:script>
+    </xhtml:div>
+  </foreignObject>
+</svg>
